@@ -83,14 +83,19 @@ TEMPLATES = [
     },
 ]
 
+
+
+
 CSRF_TRUSTED_ORIGINS = [
-    "http://127.0.0.1:8000",
-    "http://localhost"
+   # "http://127.0.0.1:8000",
+    #"http://localhost"
     "https://biblioteca-5sen.onrender.com/"
 ]
 
 
 WSGI_APPLICATION = 'Mibiblioteca.wsgi.application'
+
+LOGIN_URL = 'login'
 
 
 # Database
