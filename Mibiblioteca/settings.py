@@ -32,10 +32,21 @@ SECRET_KEY = os.environ.get('SECRET_KEY' , default='1q2w3e4r5t6y7u')
 #DEBUG = True
 DEBUG = 'RENDER' not in os.environ
 
-ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = []
+#RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+#if RENDER_EXTERNAL_HOSTNAME:
+#    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+else:
+    # Si estás haciendo pruebas y Render no define la variable
+    ALLOWED_HOSTS.append('biblioteca-5sen.onrender.com')
+
+
 
 
 
