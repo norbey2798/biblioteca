@@ -87,8 +87,8 @@ TEMPLATES = [
 
 
 CSRF_TRUSTED_ORIGINS = [
-   # "http://127.0.0.1:8000",
-    #"http://localhost"
+    "http://127.0.0.1:8000",
+    "http://localhost",
     "https://biblioteca-5sen.onrender.com/"
 ]
 
@@ -96,6 +96,11 @@ CSRF_TRUSTED_ORIGINS = [
 WSGI_APPLICATION = 'Mibiblioteca.wsgi.application'
 
 LOGIN_URL = 'login'
+
+# Seguridad de cookies para producción
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
 
 
 # Database
@@ -154,3 +159,6 @@ if not DEBUG:
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
