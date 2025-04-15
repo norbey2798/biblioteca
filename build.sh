@@ -2,7 +2,7 @@
 
 set -o errexit
 
-pip install -r requirements.txt
+pip install -r requeriments.txt
 
 python manage.py collectstatic --noinput
 
