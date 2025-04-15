@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'Mibiblioteca.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='sqlite:///db.sqlite3',  # Usado solo si no se define DATABASE_URL
+        default='sqlite:///db.sqlite3',  
         conn_max_age=600,
     )
 }
