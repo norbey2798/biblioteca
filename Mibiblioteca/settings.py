@@ -1,4 +1,4 @@
-import os  
+import os 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -24,32 +24,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = 'django-insecure-16$d)v3fc*iua4dy_%p0l0($ncy6kd#_nku^p(c#@v=3zuck%i'
-
-SECRET_KEY = os.environ.get('SECRET_KEY' , default='1q2w3e4r5t6y7u')
+SECRET_KEY = os.environ.get('SECRET_KEY', default = '1q2w3e4r5t6y7u8i9o0p')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
 DEBUG = 'RENDER' not in os.environ
 
 ALLOWED_HOSTS = []
+
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
-
-#----------------------------------------------------------------------------------------------
-
-# RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-# ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-
-# if RENDER_EXTERNAL_HOSTNAME:
-#     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
-# else:
-#     # Si estás haciendo pruebas y Render no define la variable
-#     ALLOWED_HOSTS.append('biblioteca-5sen.onrender.com')
-
-
-
+    ALLOWED_HOST.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 
@@ -64,9 +48,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'usuarios', 
 ]
-
-
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -98,22 +79,7 @@ TEMPLATES = [
 
 
 
-
-CSRF_TRUSTED_ORIGINS = [
-    "http://127.0.0.1:8000",
-    "http://localhost",
-    "https://biblioteca-5sen.onrender.com/"
-]
-
-
 WSGI_APPLICATION = 'Mibiblioteca.wsgi.application'
-
-LOGIN_URL = 'login'
-
-# Seguridad de cookies para producción
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-
 
 
 # Database
@@ -146,8 +112,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
@@ -166,12 +130,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 if not DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestaticFilesStorage'
+    STATICFILES_STOTAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-
