@@ -4,6 +4,9 @@ from django.contrib.auth.decorators import login_required
 
 # Vista para el inicio de sesión
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect("construction")  # Si ya está autenticado, redirige
+
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
@@ -14,7 +17,7 @@ def login_view(request):
         else:
             return render(request, "usuarios/login.html", {"error": "Usuario o contraseña incorrectos"})
     
-    return render(request, "usuarios/login.html")  # <- Corregido aquí
+    return render(request, "usuarios/login.html")
 
 # Vista protegida con login para mostrar "Sitio en Construcción"
 @login_required
