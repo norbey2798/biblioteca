@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Vidas entretejidas</title>
+    <link rel="stylesheet" href="{% static 'landing/css/estilos.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">
+            <img src="{% static 'img/logo-bdb.png' %}" alt=" Biblioteca Digital">
+            <div>
+                <strong></strong><br>
+                <span>                 </span>
+            </div>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Busca por título, autor, género o tema">
+            <button>🔍</button>
+        </div>
+        <nav class="nav-links">
+            <a href="#">Inicio</a>
+            <a href="#">Colecciones</a>
+            <a href="#">Exposiciones</a>
+            <a href="#">Centro de ayuda</a>
+        </nav>
+        <div class="user-actions">
+            <a href="{% url 'login' %}">Ingresa</a>
+            
+        </div>
+    </header>
+
+    <!-- Hero section -->
+    <section class="hero">
+        <div class="hero-left">
+            <img src="{% static 'img/entrelazadxs.png' %}" alt="Ilustración entretejidxs">
+        </div>
+        <div class="hero-content">
+            <p class="tagline">CONTENIDO LOCAL 🐑</p>
+            <h1>Vidas entretejidas</h1>
+            <p>
+                Este libro es resultado del <strong>laboratorio de cocreación Entretejidxs</strong>, un ejercicio para construir la memoria de San Cristóbal desde sus habitantes. 
+                El libro tiene dos lados: la <strong>"cara"</strong> narra el laboratorio desde la voz de quienes dirigieron los espacios. En su lado <strong>"cruz"</strong> se encuentran 
+                6 testimonios de los habitantes de la localidad y las historias de sus vidas.
+            </p>
+            <a href="#" class="btn-main">EXPLORA AQUÍ →</a>
+        </div>
+        <div class="hero-right">
+            <img src="{% static 'img/ilustracion-mujer.png' %}" alt="Mujer con flor">
+        </div>
+    </section>
+</body>
+</html>
