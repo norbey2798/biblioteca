@@ -3,18 +3,70 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Vidas entretejidas</title>
+    <title>Biblioteca Digital</title>
     <link rel="stylesheet" href="{% static 'landing/css/estilos.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .carousel {
+            text-align: center;
+            background-color: #fff;
+            padding: 40px;
+        }
+
+        .carousel-container {
+            position: relative;
+            max-width: 700px;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        .book-slide {
+            display: none;
+            transition: all 0.5s ease;
+        }
+
+        .book-slide.active {
+            display: block;
+        }
+
+        .book-slide img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .carousel-controls {
+            margin-top: 20px;
+        }
+
+        .carousel-controls button {
+            padding: 10px 20px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .btn-main {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn-main:hover {
+            background-color: #555;
+        }
+    </style>
 </head>
 <body>
     <!-- Navbar -->
     <header class="navbar">
         <div class="logo">
-            <img src="{% static 'img/logo-bdb.png' %}" alt=" Biblioteca Digital">
+            <img src="{% static 'landing/img/logo.png' %}" alt="Biblioteca Digital">
             <div>
                 <strong></strong><br>
-                <span>                 </span>
+                <span> </span>
             </div>
         </div>
         <div class="search-bar">
@@ -29,28 +81,59 @@
         </nav>
         <div class="user-actions">
             <a href="{% url 'login' %}">Ingresa</a>
-            
         </div>
     </header>
 
-    <!-- Hero section -->
-    <section class="hero">
-        <div class="hero-left">
-            <img src="{% static 'img/entrelazadxs.png' %}" alt="Ilustración entretejidxs">
+    <!-- Carrusel de libros -->
+    <section class="carousel">
+        <div class="carousel-container">
+            <div class="book-slide active">
+                <img src="{% static 'landing/img/harry_potter.png' %}" alt="Harry Potter">
+                <h2>Harry Potter</h2>
+                <p>Una saga mágica de aventuras, amistad y valentía escrita por J.K. Rowling.</p>
+                <a href="#" class="btn-main">DESCUBRE MÁS →</a>
+            </div>
+            <div class="book-slide">
+                <img src="{% static 'landing/img/senor_anillos.gif' %}" alt="El Señor de los Anillos">
+                <h2>El Señor de los Anillos</h2>
+                <p>Un épico viaje por la Tierra Media para destruir el Anillo Único. Autor: J.R.R. Tolkien.</p>
+                <a href="#" class="btn-main">DESCUBRE MÁS →</a>
+            </div>
+            <div class="book-slide">
+                <img src="{% static 'landing/img/alquimista.jpeg' %}" alt="El Alquimista">
+                <h2>El Alquimista</h2>
+                <p>Una inspiradora historia sobre seguir tus sueños. Escrito por Paulo Coelho.</p>
+                <a href="#" class="btn-main">DESCUBRE MÁS →</a>
+            </div>
         </div>
-        <div class="hero-content">
-            <p class="tagline">CONTENIDO LOCAL 🐑</p>
-            <h1>Vidas entretejidas</h1>
-            <p>
-                Este libro es resultado del <strong>laboratorio de cocreación Entretejidxs</strong>, un ejercicio para construir la memoria de San Cristóbal desde sus habitantes. 
-                El libro tiene dos lados: la <strong>"cara"</strong> narra el laboratorio desde la voz de quienes dirigieron los espacios. En su lado <strong>"cruz"</strong> se encuentran 
-                6 testimonios de los habitantes de la localidad y las historias de sus vidas.
-            </p>
-            <a href="#" class="btn-main">EXPLORA AQUÍ →</a>
-        </div>
-        <div class="hero-right">
-            <img src="{% static 'img/ilustracion-mujer.png' %}" alt="Mujer con flor">
+
+        <div class="carousel-controls">
+            <button onclick="prevSlide()">←</button>
+            <button onclick="nextSlide()">→</button>
         </div>
     </section>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.book-slide');
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => showSlide(currentSlide));
+    </script>
 </body>
 </html>
