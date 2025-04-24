@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .models import Cliente
+from .models import Perfil
 from django.http import JsonResponse
 #------------------------------------------------------------------------------------------------
 # Vista para el inicio de sesión
@@ -44,6 +45,43 @@ def logout_view(request):
 
 def register_view(request):
     if request.method == "POST":
+        identificacion = request.POST["identificacion"]
+        first_name = request.POST["first_name"]
+        last_name = request.POST["last_name"]
+        fecha_nacimiento = request.POST["fecha_nacimiento"]
+        password = request.POST["password"]
+        confirm_password = request.POST["confirm_password"]
+
+        if password != confirm_password:
+            messages.error(request, "Las contraseñas no coinciden.")
+            return redirect("register")
+
+        # Usamos el nombre como nombre de usuario (username)
+        username = first_name
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "El nombre ya está registrado como usuario.")
+            return redirect("register")
+
+        user = User.objects.create_user(
+            username=username,
+            password=password,
+            first_name=first_name,
+            last_name=last_name
+        )
+
+        Perfil.objects.create(
+            user=user,
+            identificacion=identificacion,
+            fecha_nacimiento=fecha_nacimiento
+        )
+
+        messages.success(request, "Registro exitoso. Inicia sesión ahora.")
+        return redirect("login")
+
+    return render(request, "usuarios/register.html")
+'''def register_view(request):
+    if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
         confirm_password = request.POST["confirm_password"]
@@ -60,7 +98,7 @@ def register_view(request):
         messages.success(request, "Registro exitoso. Inicia sesión ahora.")
         return redirect("login")
 
-    return render(request, "usuarios/register.html")
+    return render(request, "usuarios/register.html")'''
 
 #------------------------------------------------------------------------------------------------
 

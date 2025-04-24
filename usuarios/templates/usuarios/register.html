@@ -22,14 +22,22 @@
         <form method="post">
             {% csrf_token %}
             <div class="mb-3">
-                <input type="text" name="username" class="form-control" placeholder="Usuario" required>
+                <input type="text" name="identificacion" class="form-control" placeholder="Identificación" required>
+            </div>
+            <div class="mb-3">
+                <input type="text" name="first_name" class="form-control" placeholder="Nombre" required>
+            </div>
+            <div class="mb-3">
+                <input type="text" name="last_name" class="form-control" placeholder="Apellido" required>
+            </div>
+            <div class="mb-3">
+                <input type="date" name="fecha_nacimiento" class="form-control" required>
             </div>
             <div class="mb-3">
                 <input type="password" name="password" class="form-control" placeholder="Contraseña" required>
             </div>
             <div class="mb-3">
-                <input type="password" name="confirm_password" class="form-control" placeholder="Confirmar Contraseña"
-                    required>
+                <input type="password" name="confirm_password" class="form-control" placeholder="Confirmar Contraseña" required>
             </div>
             <button type="submit" class="btn btn-success w-100">Registrarse</button>
         </form>
