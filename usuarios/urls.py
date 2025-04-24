@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import login_view, logout_view, register_view, gestion_clientes_view, editar_cliente_view, eliminar_cliente_view
+from .views import login_view, logout_view, register_view, gestion_clientes_view, editar_cliente_view, eliminar_cliente_view, buscar_cliente_view, listar_clientes_view
 
 urlpatterns = [
     path("login/", login_view, name="login"),
@@ -9,5 +9,8 @@ urlpatterns = [
     path("gestion_clientes/", gestion_clientes_view, name="gestion_clientes"),#para crear
     path("gestion_clientes/<int:cliente_id>/", editar_cliente_view, name="editar_cliente"),  # Editar cliente
     path('eliminar_cliente/<int:cliente_id>/', eliminar_cliente_view, name='eliminar_cliente'), #Eliminar cliente 
+    path("clientes/buscar/", buscar_cliente_view, name="buscar_cliente"),
+    path("clientes/listar/", listar_clientes_view, name="listar_clientes"),
+
 ]
 

@@ -6,6 +6,7 @@ from django.contrib import messages
 from .models import Cliente
 from .models import Perfil
 from django.http import JsonResponse
+from django.views.decorators.http import require_GET
 #------------------------------------------------------------------------------------------------
 # Vista para el inicio de sesión
 def login_view(request):
@@ -166,3 +167,35 @@ def eliminar_cliente_view(request, cliente_id):
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
     else:
         return JsonResponse({'success': False, 'error': 'Método no permitido'}, status=405)
+
+#------------------------------------------------------------------------------------------------
+
+@login_required
+@require_GET
+def buscar_cliente_view(request):
+    identificacion = request.GET.get('identificacion')
+    try:
+        cliente = Cliente.objects.get(identificacion=identificacion)
+        return JsonResponse({
+            "id": cliente.id,
+            "identificacion": cliente.identificacion,
+            "nombre": cliente.nombre,
+            "apellido": cliente.apellido,
+            "fecha_nacimiento": str(cliente.fecha_nacimiento)
+        })
+    except ObjectDoesNotExist:
+        return JsonResponse({'error': 'Cliente no encontrado'}, status=404)
+
+#------------------------------------------------------------------------------------------------
+
+@login_required
+def listar_clientes_view(request):
+    clientes = Cliente.objects.all()
+    data = [{
+        "id": c.id,
+        "identificacion": c.identificacion,
+        "nombre": c.nombre,
+        "apellido": c.apellido,
+        "fecha_nacimiento": str(c.fecha_nacimiento)
+    } for c in clientes]
+    return JsonResponse(data, safe=False)

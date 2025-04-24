@@ -67,10 +67,8 @@
 <body>
     <h1>Gestión de Clientes</h1>
 
-    <!-- Botón Cerrar sesión -->
     <button class="logout" onclick="cerrarSesion()">Cerrar sesión</button>
 
-    <!-- Campo CSRF para JavaScript -->
     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 
     <form method="post">
@@ -83,6 +81,11 @@
         <button type="submit">Guardar Cliente</button>
     </form>
 
+    <!-- Opciones de búsqueda y listar -->
+    <input type="text" id="buscarIdentificacion" placeholder="Buscar por número de identificación">
+    <button onclick="buscarCliente()">Buscar Cliente</button>
+    <button onclick="listarClientes()">Listar Todos</button>
+
     <table id="tablaClientes">
         <thead>
             <tr>
@@ -93,90 +96,109 @@
                 <th>Acciones</th>
             </tr>
         </thead>
-        <tbody>
-            {% for cliente in clientes %}
-            <tr>
-                <td>{{ cliente.identificacion }}</td>
-                <td>{{ cliente.nombre }}</td>
-                <td>{{ cliente.apellido }}</td>
-                <td>{{ cliente.fecha_nacimiento }}</td>
-                <td>
-                    <button class="edit" data-id="{{ cliente.id }}" data-identificacion="{{ cliente.identificacion }}"
-                        data-nombre="{{ cliente.nombre }}" data-apellido="{{ cliente.apellido }}"
-                        data-fecha_nacimiento="{{ cliente.fecha_nacimiento|date:'Y-m-d' }}">
-                        Editar
-                    </button>
-                    <button class="delete" onclick="eliminarCliente(this)" data-id="{{ cliente.id }}">Eliminar</button>
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="5">No hay clientes registrados.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
+        <tbody></tbody>
     </table>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const botonesEditar = document.querySelectorAll('button.edit');
             const form = document.querySelector('form');
 
-            botonesEditar.forEach(boton => {
-                boton.addEventListener('click', function () {
-                    const id = this.dataset.id;
-                    const identificacion = this.dataset.identificacion;
-                    const nombre = this.dataset.nombre;
-                    const apellido = this.dataset.apellido;
-                    const fechaNacimiento = this.dataset.fecha_nacimiento;
+            document.getElementById('tablaClientes').addEventListener('click', function (e) {
+                if (e.target.classList.contains('edit')) {
+                    const fila = e.target.closest('tr');
+                    const datos = e.target.dataset;
 
-                    // Llenar el formulario
-                    form.action = `/usuarios/gestion_clientes/${id}/`;
-                    form.querySelector('input[name="identificacion"]').value = identificacion;
-                    form.querySelector('input[name="nombre"]').value = nombre;
-                    form.querySelector('input[name="apellido"]').value = apellido;
-                    form.querySelector('input[name="fecha_nacimiento"]').value = fechaNacimiento;
-
-                    // Cambiar el texto del botón
+                    form.action = `/usuarios/gestion_clientes/${datos.id}/`;
+                    form.querySelector('input[name="cliente_id"]').value = datos.id;
+                    form.querySelector('input[name="identificacion"]').value = datos.identificacion;
+                    form.querySelector('input[name="nombre"]').value = datos.nombre;
+                    form.querySelector('input[name="apellido"]').value = datos.apellido;
+                    form.querySelector('input[name="fecha_nacimiento"]').value = datos.fecha_nacimiento;
                     form.querySelector('button[type="submit"]').textContent = 'Actualizar Cliente';
-                });
+                }
             });
         });
-
-        function eliminarCliente(button) {
-            const clienteId = button.getAttribute("data-id");
-            const confirmar = confirm("¿Estás seguro de que deseas eliminar este cliente?");
-            if (confirmar) {
-                fetch(`/usuarios/eliminar_cliente/${clienteId}/`, {
-                    method: "POST",
-                    headers: {
-                        "X-CSRFToken": getCSRFToken(),
-                    },
-                })
-                .then(response => {
-                    if (response.ok) {
-                        const fila = button.closest('tr');
-                        fila.remove();
-                    } else {
-                        alert("Error al eliminar el cliente.");
-                    }
-                });
-            }
-        }
 
         function cerrarSesion() {
             fetch("{% url 'logout' %}", {
                 method: "POST",
-                headers: {
-                    "X-CSRFToken": getCSRFToken(),
-                },
+                headers: { "X-CSRFToken": getCSRFToken() }
             })
-            .then(response => {
+                .then(response => {
+                    if (response.ok) window.location.href = "/";
+                    else alert("Error al cerrar sesión.");
+                });
+        }
+
+        function eliminarCliente(id, boton) {
+            if (!confirm("¿Seguro que deseas eliminar este cliente?")) return;
+
+            fetch(`/usuarios/eliminar_cliente/${id}/`, {
+                method: "POST",
+                headers: { "X-CSRFToken": getCSRFToken() }
+            }).then(response => {
                 if (response.ok) {
-                    window.location.href = "/";
+                    boton.closest('tr').remove();
                 } else {
-                    alert("Error al cerrar sesión.");
+                    alert("Error al eliminar el cliente.");
                 }
+            });
+        }
+
+        function buscarCliente() {
+            const identificacion = document.getElementById("buscarIdentificacion").value;
+            if (!identificacion) {
+                alert("Ingresa una identificación.");
+                return;
+            }
+
+            fetch(`/usuarios/clientes/buscar/?identificacion=${identificacion}`)
+                .then(response => response.json())
+                .then(cliente => {
+                    actualizarTabla([cliente]);
+                })
+                .catch(() => {
+                    alert("Cliente no encontrado.");
+                });
+        }
+
+        function listarClientes() {
+            fetch(`/usuarios/clientes/listar/`)
+                .then(response => response.json())
+                .then(clientes => {
+                    actualizarTabla(clientes);
+                });
+        }
+
+        function actualizarTabla(clientes) {
+            const tbody = document.querySelector("#tablaClientes tbody");
+            tbody.innerHTML = "";
+
+            if (clientes.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5">No hay clientes registrados.</td></tr>';
+                return;
+            }
+
+            clientes.forEach(cliente => {
+                const fila = document.createElement("tr");
+                fila.innerHTML = `
+                    <td>${cliente.identificacion}</td>
+                    <td>${cliente.nombre}</td>
+                    <td>${cliente.apellido}</td>
+                    <td>${cliente.fecha_nacimiento}</td>
+                    <td>
+                        <button class="edit"
+                            data-id="${cliente.id}"
+                            data-identificacion="${cliente.identificacion}"
+                            data-nombre="${cliente.nombre}"
+                            data-apellido="${cliente.apellido}"
+                            data-fecha_nacimiento="${cliente.fecha_nacimiento}">
+                            Editar
+                        </button>
+                        <button class="delete" onclick="eliminarCliente(${cliente.id}, this)">Eliminar</button>
+                    </td>
+                `;
+                tbody.appendChild(fila);
             });
         }
 
@@ -184,6 +206,6 @@
             return document.querySelector('[name=csrfmiddlewaretoken]').value;
         }
     </script>
-
 </body>
+
 </html>
